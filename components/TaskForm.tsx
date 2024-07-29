@@ -10,7 +10,7 @@ interface Task {
 
 interface TaskFormProps {
   task?: Task | null;
-  onSave: any;
+  onSave: (task: Task) => void;
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ task, onSave }) => {
@@ -39,8 +39,10 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onSave }) => {
     setDescription("");
   };
 
+  const isDisabled = !title.trim() || !description.trim();
+
   return (
-    <form onSubmit={handleSubmit} className="mb-4 p-4 border rounded">
+    <form onSubmit={handleSubmit} className="mb-4 p-6 bg-zinc-900 rounded-lg text-white">
       <h2 className="text-lg font-bold mb-2">
         {task ? "Edit Task" : "Add Task"}
       </h2>
@@ -49,15 +51,19 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onSave }) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Task Title"
-        className="w-full p-2 mb-2 border rounded"
+        className="w-full p-2 mb-2 border rounded text-black"
       />
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Task Description"
-        className="w-full p-2 mb-2 border rounded"
+        className="w-full p-2 mb-2 border rounded text-black"
       />
-      <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+      <button
+        type="submit"
+        disabled={isDisabled}
+        className={`p-2 px-4 ${isDisabled ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} transition-all text-white rounded-full`}
+      >
         {task ? "Update Task" : "Add Task"}
       </button>
     </form>

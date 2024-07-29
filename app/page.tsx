@@ -5,6 +5,7 @@ import axios from "axios";
 import TaskForm from "@/components/TaskForm";
 import TaskList from "@/components/TaskList";
 import { Task } from "@/types";
+import { SparklesCore } from "@/components/ui/sparkles";
 
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -75,23 +76,47 @@ const Home: React.FC = () => {
   );
 
   return (
-    <div className="w-full h-screen">
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-2">To-do List</h1>
-        <input
-          type="text"
-          placeholder="Search tasks..."
-          value={search}
-          onChange={handleSearchChange}
-          className="mb-4 p-2 px-4 border rounded-full"
-        />
-        <TaskForm task={currentTask} onSave={handleSave} />
-        <TaskList
-          tasks={filteredTasks}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
-          onToggleComplete={handleToggleComplete}
-        />
+    <div className="w-full min-h-screen bg-black">
+      <div className="w-full p-4">
+        <div className="h-18 w-full bg-black flex flex-col items-center justify-center overflow-hidden rounded-md">
+          <h1 className="md:text-4xl text-3xl lg:text-4xl font-bold text-center text-white relative z-20">
+            To-do List
+          </h1>
+          <div className="w-full h-40 relative">
+            {/* Gradients */}
+            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+            <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+            <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+
+            {/* Core component */}
+            <SparklesCore
+              background="transparent"
+              minSize={0.4}
+              maxSize={1}
+              particleDensity={1200}
+              className="w-full h-full"
+              particleColor="#FFFFFF"
+            />
+
+            {/* Radial Gradient to prevent sharp edges */}
+            <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+          </div>
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            value={search}
+            onChange={handleSearchChange}
+            className="mb-4 p-2 px-4 border rounded-full"
+          />
+          <TaskForm task={currentTask} onSave={handleSave} />
+          <TaskList
+            tasks={filteredTasks}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+            onToggleComplete={handleToggleComplete}
+          />
+        </div>
       </div>
     </div>
   );
