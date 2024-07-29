@@ -18,6 +18,16 @@ This is a Todo List application developed using Next.js with TypeScript and Tail
 
 1. Clone the repository:
 
-   ```bash
-   git clone <repository-url>
+   git clone [<repository-url>](https://github.com/tsthakur123/todo_app.git)
    cd todo-app
+
+
+2. Install dependencies:
+
+   npm install
+
+3. Run the development server:
+
+   npm run dev
+
+4. Open http://localhost:3000 in your browser.
