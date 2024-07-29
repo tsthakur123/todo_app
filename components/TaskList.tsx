@@ -1,12 +1,5 @@
-import { useState } from 'react';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  lastUpdated: string;
-}
+import { useState } from "react";
+import { Task } from "@/types";
 
 interface TaskListProps {
   tasks: Task[];
@@ -15,7 +8,12 @@ interface TaskListProps {
   onToggleComplete: (id: number) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete, onToggleComplete }) => {
+const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  onUpdate,
+  onDelete,
+  onToggleComplete,
+}) => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const handleExpand = (id: number) => {
@@ -25,18 +23,28 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete, onToggle
   return (
     <div>
       {tasks.map((task) => (
-        <div key={task.id} className={`border p-4 mb-2 rounded ${task.completed ? 'bg-green-100' : ''}`}>
+        <div
+          key={task.id}
+          className={`border p-4 mb-2 rounded ${
+            task.completed ? "bg-green-100" : ""
+          }`}
+        >
           <h3 className="text-xl font-bold">{task.title}</h3>
           <button
             onClick={() => handleExpand(task.id)}
             className="text-blue-500"
           >
-            {expandedId === task.id ? 'Hide Details' : 'Show Details'}
+            {expandedId === task.id ? "Hide Details" : "Show Details"}
           </button>
           {expandedId === task.id && (
             <div>
               <p>{task.description}</p>
-              <p className="text-sm text-gray-500">Last Updated: {new Date(task.lastUpdated).toLocaleString()}</p>
+              <p className="text-sm text-gray-500">
+                Last Updated:{" "}
+                {task.lastUpdated
+                  ? new Date(task.lastUpdated).toLocaleString()
+                  : "No date available"}
+              </p>
               <button
                 onClick={() => onUpdate(task)}
                 className="mt-2 p-1 bg-yellow-500 text-white rounded"
@@ -53,7 +61,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onUpdate, onDelete, onToggle
                 onClick={() => onToggleComplete(task.id)}
                 className="mt-2 p-1 bg-blue-500 text-white rounded ml-2"
               >
-                {task.completed ? 'Mark as Incomplete' : 'Mark as Done'}
+                {task.completed ? "Mark as Incomplete" : "Mark as Done"}
               </button>
             </div>
           )}

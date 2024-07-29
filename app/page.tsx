@@ -4,14 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import TaskForm from "@/components/TaskForm";
 import TaskList from "@/components/TaskList";
-
-interface Task {
-  id?: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  lastUpdated?: string;
-}
+import { Task } from "@/types";
 
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -74,7 +67,7 @@ const Home: React.FC = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
-    router.push(`/?search=${value}`, { shallow: true });
+    router.push(`/?search=${value}`);
   };
 
   const filteredTasks = tasks.filter((task) =>

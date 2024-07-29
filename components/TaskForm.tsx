@@ -10,7 +10,7 @@ interface Task {
 
 interface TaskFormProps {
   task?: Task | null;
-  onSave: (task: Task) => void;
+  onSave: any;
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ task, onSave }) => {
