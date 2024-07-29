@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Todo List Application
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This is a Todo List application developed using Next.js with TypeScript and Tailwind CSS. It allows users to create, update, delete, and search tasks. Tasks are stored in a dummy JSON file and managed via serverless API routes.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Create Task**: Add new tasks.
+- **Update Task**: Edit existing tasks.
+- **Mark as Done**: Mark tasks as completed.
+- **Search Tasks**: Filter tasks based on title.
+- **Expandable List**: View task details and last update time.
+- **Server-Side Rendering (SSR)**: Enhanced performance with SSR.
+- **URL Parameters**: Handle search functionality using URL parameters.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Clone the repository:
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   git clone <repository-url>
+   cd todo-app
