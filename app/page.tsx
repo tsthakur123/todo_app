@@ -1,46 +1,43 @@
+// app/page.tsx
 "use client";
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import TaskForm from "@/components/TaskForm";
 import TaskList from "@/components/TaskList";
 import { Task } from "@/types";
 import { SparklesCore } from "@/components/ui/sparkles";
+import Search from "@/components/Search";
 
 const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
-  const [search, setSearch] = useState("");
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     const loadTasks = async () => {
       const response = await axios.get("/api/tasks");
       setTasks(response.data);
+      setFilteredTasks(response.data); // Initialize filteredTasks
     };
 
     loadTasks();
   }, []);
-
-  useEffect(() => {
-    const searchQuery = searchParams.get("search");
-    if (searchQuery) {
-      setSearch(searchQuery);
-    }
-  }, [searchParams]);
 
   const handleSave = async (task: Task) => {
     if (task.id) {
       const updatedTask = { ...task, lastUpdated: new Date().toISOString() };
       await axios.put(`/api/tasks?id=${task.id}`, updatedTask);
       setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t)));
+      setFilteredTasks(
+        filteredTasks.map((t) => (t.id === task.id ? updatedTask : t))
+      ); // Update filteredTasks
     } else {
       const response = await axios.post("/api/tasks", {
         ...task,
         lastUpdated: new Date().toISOString(),
       });
       setTasks([...tasks, response.data]);
+      setFilteredTasks([...filteredTasks, response.data]); // Update filteredTasks
     }
     setCurrentTask(null);
   };
@@ -50,6 +47,7 @@ const Home: React.FC = () => {
   const handleDelete = async (id: number) => {
     await axios.delete(`/api/tasks?id=${id}`);
     setTasks(tasks.filter((task) => task.id !== id));
+    setFilteredTasks(filteredTasks.filter((task) => task.id !== id)); // Update filteredTasks
   };
 
   const handleToggleComplete = async (id: number) => {
@@ -62,18 +60,15 @@ const Home: React.FC = () => {
       };
       await axios.put(`/api/tasks?id=${id}`, updatedTask);
       setTasks(tasks.map((t) => (t.id === id ? updatedTask : t)));
+      setFilteredTasks(
+        filteredTasks.map((t) => (t.id === id ? updatedTask : t))
+      ); // Update filteredTasks
     }
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearch(value);
-    router.push(`/?search=${value}`);
+  const handleFilteredTasks = (filteredTasks: Task[]) => {
+    setFilteredTasks(filteredTasks);
   };
-
-  const filteredTasks = tasks.filter((task) =>
-    task.title.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <div className="w-full min-h-screen bg-black">
@@ -103,21 +98,17 @@ const Home: React.FC = () => {
             <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
           </div>
           <Suspense>
-            <input
-              type="text"
-              placeholder="Search tasks..."
-              value={search}
-              onChange={handleSearchChange}
-              className="mb-4 p-2 px-4 border rounded-full"
+            <Search tasks={tasks} onFilteredTasks={handleFilteredTasks} />
+          </Suspense>
+          <Suspense>
+            <TaskForm task={currentTask} onSave={handleSave} />
+            <TaskList
+              tasks={filteredTasks}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+              onToggleComplete={handleToggleComplete}
             />
           </Suspense>
-          <TaskForm task={currentTask} onSave={handleSave} />
-          <TaskList
-            tasks={filteredTasks}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
-            onToggleComplete={handleToggleComplete}
-          />
         </div>
       </div>
     </div>
