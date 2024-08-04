@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import TaskForm from "@/components/TaskForm";
@@ -102,13 +102,15 @@ const Home: React.FC = () => {
             {/* Radial Gradient to prevent sharp edges */}
             <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
           </div>
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            value={search}
-            onChange={handleSearchChange}
-            className="mb-4 p-2 px-4 border rounded-full"
-          />
+          <Suspense>
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={search}
+              onChange={handleSearchChange}
+              className="mb-4 p-2 px-4 border rounded-full"
+            />
+          </Suspense>
           <TaskForm task={currentTask} onSave={handleSave} />
           <TaskList
             tasks={filteredTasks}
