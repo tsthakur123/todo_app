@@ -100,7 +100,6 @@ const Home: React.FC = () => {
           <Suspense>
             <Search tasks={tasks} onFilteredTasks={handleFilteredTasks} />
           </Suspense>
-          <Suspense>
             <TaskForm task={currentTask} onSave={handleSave} />
             <TaskList
               tasks={filteredTasks}
@@ -108,7 +107,6 @@ const Home: React.FC = () => {
               onDelete={handleDelete}
               onToggleComplete={handleToggleComplete}
             />
-          </Suspense>
         </div>
       </div>
     </div>
