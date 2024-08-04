@@ -13,32 +13,30 @@ const Home: React.FC = () => {
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
 
+  // Load tasks from local storage
   useEffect(() => {
-    const loadTasks = async () => {
-      const response = await axios.get("/api/tasks");
-      setTasks(response.data);
-      setFilteredTasks(response.data); // Initialize filteredTasks
+    const loadTasks = () => {
+      const storedTasks = localStorage.getItem("tasks");
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      }
     };
 
     loadTasks();
   }, []);
 
-  const handleSave = async (task: Task) => {
-    if (task.id) {
-      const updatedTask = { ...task, lastUpdated: new Date().toISOString() };
-      await axios.put(`/api/tasks?id=${task.id}`, updatedTask);
-      setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t)));
-      setFilteredTasks(
-        filteredTasks.map((t) => (t.id === task.id ? updatedTask : t))
-      ); // Update filteredTasks
-    } else {
-      const response = await axios.post("/api/tasks", {
-        ...task,
-        lastUpdated: new Date().toISOString(),
-      });
-      setTasks([...tasks, response.data]);
-      setFilteredTasks([...filteredTasks, response.data]); // Update filteredTasks
-    }
+  // Save tasks to local storage
+  const saveTasksToLocalStorage = (tasks: Task[]) => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  };
+
+  const handleSave = (task: Task) => {
+    const updatedTasks = task.id
+      ? tasks.map((t) => (t.id === task.id ? task : t))
+      : [...tasks, { ...task, id: new Date().getTime() }];
+
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
     setCurrentTask(null);
   };
 
@@ -100,13 +98,13 @@ const Home: React.FC = () => {
           <Suspense>
             <Search tasks={tasks} onFilteredTasks={handleFilteredTasks} />
           </Suspense>
-            <TaskForm task={currentTask} onSave={handleSave} />
-            <TaskList
-              tasks={filteredTasks}
-              onUpdate={handleUpdate}
-              onDelete={handleDelete}
-              onToggleComplete={handleToggleComplete}
-            />
+          <TaskForm task={currentTask} onSave={handleSave} />
+          <TaskList
+            tasks={filteredTasks}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+            onToggleComplete={handleToggleComplete}
+          />
         </div>
       </div>
     </div>
