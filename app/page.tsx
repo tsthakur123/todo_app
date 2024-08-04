@@ -42,28 +42,20 @@ const Home: React.FC = () => {
 
   const handleUpdate = (task: Task) => setCurrentTask(task);
 
-  const handleDelete = async (id: number) => {
-    await axios.delete(`/api/tasks?id=${id}`);
-    setTasks(tasks.filter((task) => task.id !== id));
-    setFilteredTasks(filteredTasks.filter((task) => task.id !== id)); // Update filteredTasks
+  const handleDelete = (id: number) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
   };
 
-  const handleToggleComplete = async (id: number) => {
-    const task = tasks.find((t) => t.id === id);
-    if (task) {
-      const updatedTask = {
-        ...task,
-        completed: !task.completed,
-        lastUpdated: new Date().toISOString(),
-      };
-      await axios.put(`/api/tasks?id=${id}`, updatedTask);
-      setTasks(tasks.map((t) => (t.id === id ? updatedTask : t)));
-      setFilteredTasks(
-        filteredTasks.map((t) => (t.id === id ? updatedTask : t))
-      ); // Update filteredTasks
-    }
+  const handleToggleComplete = (id: number) => {
+    const updatedTasks = tasks.map((t) =>
+      t.id === id ? { ...t, completed: !t.completed } : t
+    );
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
   };
-
+  
   const handleFilteredTasks = (filteredTasks: Task[]) => {
     setFilteredTasks(filteredTasks);
   };
